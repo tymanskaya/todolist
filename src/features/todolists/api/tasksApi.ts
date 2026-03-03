@@ -2,12 +2,17 @@ import { baseApi } from "@/app/baseApi"
 import { instance } from "@/common/instance"
 import type { BaseResponse } from "@/common/types"
 import type { DomainTask, GetTasksResponse, UpdateTaskModel } from "./tasksApi.types"
+import { PAGE_SIZE } from "@/common/constants"
 
 export const tasksApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    getTasks: build.query<GetTasksResponse, string>({
-      query: (todolistId) => `todo-lists/${todolistId}/tasks`,
-      providesTags: (result, _error, todolistId)=>{
+    getTasks: build.query<GetTasksResponse, { todolistId: string; params: { page: number } }
+    >({
+      query: ({ todolistId, params }) => ({
+        url: `todo-lists/${todolistId}/tasks`,
+        params: { ...params, count: PAGE_SIZE },
+      }),
+      providesTags: (result, _error, { todolistId })=>{
         //(result, error, arg)
         //result - то что возвращает наш query запрос, в данном случчае массив тасок
         //error - если запрос упал, здесь будет объект ошибки
