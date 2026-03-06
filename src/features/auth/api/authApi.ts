@@ -4,8 +4,16 @@ import type { LoginInputs } from "@/features/auth/lib/schemas"
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    login: builder.mutation<BaseResponse<{ userId: number; token: string }>, LoginInputs>({
-      query: (body) => ({ method: "post", url: "auth/login", body }),
+    // Расширяем LoginInputs добавлением необязательного поля captcha
+    login: builder.mutation<
+      BaseResponse<{ userId: number; token: string }>,
+      LoginInputs & { captcha?: string | null }
+    >({
+      query: (body) => ({
+        method: "post",
+        url: "auth/login",
+        body // теперь здесь будут и данные формы, и токен капчи
+      }),
     }),
     logout: builder.mutation<BaseResponse, void>({
       query: () => ({ method: "delete", url: "auth/login" }),
