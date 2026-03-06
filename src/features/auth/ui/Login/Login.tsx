@@ -10,17 +10,22 @@ import Checkbox from "@mui/material/Checkbox"
 import FormControl from "@mui/material/FormControl"
 import FormControlLabel from "@mui/material/FormControlLabel"
 import FormGroup from "@mui/material/FormGroup"
-import FormLabel from "@mui/material/FormLabel"
+
 import Grid from "@mui/material/Grid"
 import TextField from "@mui/material/TextField"
 import { Controller, type SubmitHandler, useForm } from "react-hook-form"
 import styles from "./Login.module.css"
 import { useRef, useState } from "react"
 import ReCAPTCHA from "react-google-recaptcha"
+import Visibility from "@mui/icons-material/Visibility"
+import VisibilityOff from "@mui/icons-material/VisibilityOff"
+import IconButton from "@mui/material/IconButton"
+import InputAdornment from "@mui/material/InputAdornment"
 
 export const Login = () => {
   const recaptchaRef = useRef<ReCAPTCHA>(null)
   const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+  const [showPassword, setShowPassword] = useState(false)
 
   const [login] = useLoginMutation()
   const dispatch = useAppDispatch()
@@ -52,20 +57,36 @@ export const Login = () => {
     })
   }
 
+  const handleClickShowPassword = () => setShowPassword((show) => !show)
+
   return (
     <Grid container justifyContent={"center"}>
-      {/* 4. Убираем return с проверкой сверху, всё рендерим тут */}
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormControl>
-          <FormLabel>
-            {/* ... ваш текст про тестовый аккаунт ... */}
-          </FormLabel>
           <FormGroup>
             <TextField label="Email" margin="normal" error={!!errors.email} {...register("email")} />
             {errors.email && <span className={styles.errorMessage}>{errors.email.message}</span>}
 
-            <TextField type="password" label="Password" margin="normal" error={!!errors.password} {...register("password")} />
+            <TextField
+              type={showPassword ? "text" : "password"} // Переключаем тип инпута
+              label="Password"
+              margin="normal"
+              error={!!errors.password}
+              {...register("password")}
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleClickShowPassword} edge="end">
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+              }}
+            />
             {errors.password && <span className={styles.errorMessage}>{errors.password.message}</span>}
+
 
             <FormControlLabel
               label={"Remember me"}
