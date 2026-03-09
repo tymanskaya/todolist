@@ -50,7 +50,7 @@ export const Header = () => {
   }
 
   return (
-    <AppBar position="static" sx={{ mb: "30px" }}>
+    <AppBar position="static" elevation={1} sx={{ mb: "30px" }}>
       <Toolbar>
         <Container maxWidth={"lg"} sx={containerSx}>
           <IconButton color="inherit">
@@ -58,7 +58,7 @@ export const Header = () => {
           </IconButton>
           <div>
             {isLoggedIn && <NavButton onClick={logoutHandler}>Sign out</NavButton>}
-            <NavButton background={theme.palette.primary.dark}>Faq</NavButton>
+            <NavButton >Faq</NavButton>
             <Switch color={"default"} onChange={changeMode} />
           </div>
         </Container>

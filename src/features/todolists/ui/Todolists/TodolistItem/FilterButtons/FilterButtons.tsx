@@ -1,5 +1,5 @@
 import { useAppDispatch } from "@/common/hooks"
-import { containerSx } from "@/common/styles"
+import styles from './FilterButtons.module.css'
 import { todolistsApi } from "@/features/todolists/api/todolistsApi"
 import type { DomainTodolist, FilterValues } from "@/features/todolists/lib/types"
 import Box from "@mui/material/Box"
@@ -26,20 +26,23 @@ export const FilterButtons = ({ todolist }: Props) => {
   }
 
   return (
-    <Box sx={containerSx}>
-      <Button variant={filter === "all" ? "outlined" : "text"} color={"inherit"} onClick={() => changeFilter("all")}>
+    <Box className={styles.filterContainer}>
+      <Button
+        className={`${styles.filterBtn} ${filter === "all" ? styles.activeBtn : ""}`}
+        onClick={() => changeFilter("all")}
+      >
         All
       </Button>
+
       <Button
-        variant={filter === "active" ? "outlined" : "text"}
-        color={"primary"}
+        className={`${styles.filterBtn} ${filter === "active" ? styles.activeBtn : ""}`}
         onClick={() => changeFilter("active")}
       >
         Active
       </Button>
+
       <Button
-        variant={filter === "completed" ? "outlined" : "text"}
-        color={"secondary"}
+        className={`${styles.filterBtn} ${filter === "completed" ? styles.activeBtn : ""}`}
         onClick={() => changeFilter("completed")}
       >
         Completed

@@ -14,6 +14,9 @@ importers:
       '@emotion/styled':
         specifier: 11.14.1
         version: 11.14.1(@emotion/react@11.14.0(@types/react@19.1.8)(react@19.1.0))(@types/react@19.1.8)(react@19.1.0)
+      '@fontsource/montserrat':
+        specifier: ^5.2.8
+        version: 5.2.8
       '@hookform/resolvers':
         specifier: 5.1.1
         version: 5.1.1(react-hook-form@7.58.1(react@19.1.0))
@@ -338,6 +341,9 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@fontsource/montserrat@5.2.8':
+    resolution: {integrity: sha512-xTjLxSbSfCycDB0pwmNsfNvdfWPaDaRQ2LC6yt/ZI7SdvXG52zHnzNYC/09mzuAuWNJyShkteutfCoDgym56hQ==}
 
   '@hookform/resolvers@5.1.1':
     resolution: {integrity: sha512-J/NVING3LMAEvexJkyTLjruSm7aOFx7QX21pzkiJfMoNG0wl5aFEjLTl7ay7IQb9EWY6AkrBy7tHL2Alijpdcg==}
@@ -1488,6 +1494,8 @@ snapshots:
 
   '@esbuild/win32-x64@0.25.12':
     optional: true
+
+  '@fontsource/montserrat@5.2.8': {}
 
   '@hookform/resolvers@5.1.1(react-hook-form@7.58.1(react@19.1.0))':
     dependencies:

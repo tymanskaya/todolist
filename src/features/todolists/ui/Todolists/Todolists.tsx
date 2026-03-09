@@ -25,7 +25,17 @@ export const Todolists = () => {
     <>
       {todolists?.map((todolist) => (
         <Grid key={todolist.id}>
-          <Paper sx={{ p: "0 20px 20px 20px" }}>
+          <Paper  elevation={3}
+                  sx={{
+                    p: 3,
+                    borderRadius: '16px',
+                    transition: 'transform 0.2s',
+                    width: '320px',           // Фиксированная ширина
+                        // Фиксированная высота (подберите под себя)
+                    display: 'flex',          // Включаем flexbox
+                    flexDirection: 'column',
+                    '&:hover': { transform: 'translateY(-4px)' }
+                  }}>
             <TodolistItem todolist={todolist} />
           </Paper>
         </Grid>

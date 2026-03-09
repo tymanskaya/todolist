@@ -1,0 +1,24 @@
+.filterContainer {
+    display: flex;
+    background-color: #f1f5f9; /* Светло-серый фон как на скриншоте */
+    padding: 4px;
+    border-radius: 10px;
+    gap: 4px;
+    margin-top: 12px;
+}
+
+.filterBtn {
+    flex: 1; /* Кнопки будут равной ширины */
+    text-transform: none !important;
+    font-weight: 600 !important;
+    font-size: 0.75rem !important; /* Чуть меньше для аккуратности */
+    border-radius: 8px !important;
+    color: #64748b !important;
+    transition: all 0.2s ease !important;
+}
+
+.activeBtn {
+    background-color: #ffffff !important;
+    color: #e91e63 !important; /* Цвет вашей шапки для преемственности */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+}
