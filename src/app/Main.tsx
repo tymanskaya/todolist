@@ -9,16 +9,18 @@ export const Main = () => {
   const [addTodolist] = useAddTodolistMutation()
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container maxWidth="lg" sx={{ py: 4 }} >
       {/* Верхняя форма добавления */}
       <Grid container justifyContent="flex-start" sx={{ mb: 6 }}>
-        <Box sx={{ width: '100%'}} >
+        <Box sx={{ width: '50%'}} >
           <CreateItemForm onCreateItem={addTodolist} />
         </Box>
       </Grid>
 
+
       {/* Сетка тудулистов */}
-      <Grid container spacing={4} justifyContent="space-between" alignItems="stretch" sx={{ width: '100%'}}>
+
+      <Grid container spacing={4} justifyContent="flex-start" alignItems="stretch" sx={{ width: '100%'}}>
         <Todolists />
       </Grid>
     </Container>

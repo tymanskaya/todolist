@@ -40,7 +40,15 @@ export const TaskItem = ({ task, todolist }: Props) => {
 
   return (
     <ListItem sx={getListItemSx(isTaskCompleted)}>
-      <div>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        flexGrow: 1,
+        minWidth: 0,
+        wordBreak: 'break-all',       /* Исправлено: camelCase + кавычки */
+        overflowWrap: 'break-word',   /* Исправлено: camelCase + кавычки */
+        width: '100%'                 /* Исправлено: кавычки */
+      }}>
         <Checkbox checked={isTaskCompleted} onChange={changeTaskStatus} disabled={disabled} />
         <EditableSpan value={task.title} onChange={changeTaskTitle} disabled={disabled} />
       </div>

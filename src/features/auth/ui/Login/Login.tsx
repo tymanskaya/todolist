@@ -5,22 +5,13 @@ import { useAppDispatch} from "@/common/hooks"
 import { useLoginMutation } from "@/features/auth/api/authApi"
 import { type LoginInputs, loginSchema } from "@/features/auth/lib/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
-import Button from "@mui/material/Button"
-import Checkbox from "@mui/material/Checkbox"
-import FormControl from "@mui/material/FormControl"
-import FormControlLabel from "@mui/material/FormControlLabel"
-import FormGroup from "@mui/material/FormGroup"
-
-import Grid from "@mui/material/Grid"
-import TextField from "@mui/material/TextField"
 import { Controller, type SubmitHandler, useForm } from "react-hook-form"
-import styles from "./Login.module.css"
 import { useRef, useState } from "react"
 import ReCAPTCHA from "react-google-recaptcha"
 import Visibility from "@mui/icons-material/Visibility"
 import VisibilityOff from "@mui/icons-material/VisibilityOff"
-import IconButton from "@mui/material/IconButton"
-import InputAdornment from "@mui/material/InputAdornment"
+import { Paper, Typography, Box, Stack, TextField, FormControlLabel, Checkbox, Button, Grid, InputAdornment, IconButton } from '@mui/material';
+
 
 export const Login = () => {
   const recaptchaRef = useRef<ReCAPTCHA>(null)
@@ -30,8 +21,14 @@ export const Login = () => {
   const [login] = useLoginMutation()
   const dispatch = useAppDispatch()
 
+  const {
+    register,
+    handleSubmit,
+    reset,
+    control,
+    formState: { errors },
 
-  const { register, handleSubmit, reset, control, formState: { errors }, setError } = useForm<LoginInputs>({
+  } = useForm<LoginInputs>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "", rememberMe: false },
   })
@@ -60,65 +57,103 @@ export const Login = () => {
   const handleClickShowPassword = () => setShowPassword((show) => !show)
 
   return (
-    <Grid container justifyContent={"center"}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <FormControl>
-          <FormGroup>
-            <TextField label="Email" margin="normal" error={!!errors.email} {...register("email")} />
-            {errors.email && <span className={styles.errorMessage}>{errors.email.message}</span>}
+    <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: "80vh" }}>
+      {/* Paper создает эффект карточки с тенью */}
+      <Paper
+        elevation={6}
+        sx={{
+          p: 4, // Внутренние отступы (padding)
+          width: "100%",
+          maxWidth: 420, // Ограничение ширины
+          borderRadius: 2, // Скругление углов
+          textAlign: "center",
+        }}
+      >
+        {/* Заголовок формы */}
+        <Typography variant="h5" component="h1" gutterBottom sx={{ mb: 3 }}>
+          Login
+        </Typography>
 
-            <TextField
-              type={showPassword ? "text" : "password"} // Переключаем тип инпута
-              label="Password"
-              margin="normal"
-              error={!!errors.password}
-              {...register("password")}
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={handleClickShowPassword} edge="end">
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                },
-              }}
-            />
-            {errors.password && <span className={styles.errorMessage}>{errors.password.message}</span>}
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {/* Stack управляет вертикальными отступами между элементами */}
+          <Stack spacing={2.5}>
+            <Box>
+              <TextField fullWidth label="Email" error={!!errors.email} {...register("email")} />
+              {errors.email && (
+                <Typography color="error" variant="caption" sx={{ display: "block", textAlign: "left", mt: 0.5 }}>
+                  {errors.email.message}
+                </Typography>
+              )}
+            </Box>
 
+            <Box>
+              <TextField
+                fullWidth
+                type={showPassword ? "text" : "password"}
+                label="Password"
+                error={!!errors.password}
+                {...register("password")}
+                slotProps={{
+                  // Оставляем slotProps, если у тебя MUI v6
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={handleClickShowPassword} edge="end">
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+              />
+              {errors.password && (
+                <Typography color="error" variant="caption" sx={{ display: "block", textAlign: "left", mt: 0.5 }}>
+                  {errors.password.message}
+                </Typography>
+              )}
+            </Box>
 
             <FormControlLabel
-              label={"Remember me"}
+              sx={{ alignSelf: "flex-start" }} // Прижимаем чекбокс влево
+              label="Remember me"
               control={
                 <Controller
-                  name={"rememberMe"}
+                  name="rememberMe"
                   control={control}
-                  render={({ field: { value, ...field } }) => <Checkbox {...field} checked={value} />}
+                  render={({ field: { value, ...field } }) => <Checkbox {...field} checked={value} size="small" />}
                 />
               }
             />
 
-            {/* 5. Добавляем капчу ПЕРЕД кнопкой */}
-            <div style={{ marginBottom: "20px" }}>
+            {/* Контейнер для капчи */}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                overflow: "hidden", // Чтобы капча не вылезала на мобилках
+                my: 1,
+              }}
+            >
               <ReCAPTCHA
                 ref={recaptchaRef}
                 sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
                 onChange={setCaptchaToken}
               />
-            </div>
+            </Box>
 
             <Button
               type="submit"
               variant="contained"
-              color="primary"
-              disabled={!captchaToken} // Кнопка активна только после капчи
+              fullWidth
+              size="large"
+              disabled={!captchaToken}
+              sx={{ mt: 1, py: 1.5, fontWeight: "bold" }}
             >
-              Login
+              Sign In
             </Button>
-          </FormGroup>
-        </FormControl>
-      </form>
+          </Stack>
+        </form>
+      </Paper>
     </Grid>
   )
 }

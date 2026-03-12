@@ -1,12 +1,14 @@
 import { SxProps } from "@mui/material"
 
 export const getListItemSx = (isDone: boolean): SxProps => ({
-  p: "2px 8px",
+  p: "2px ",
   justifyContent: "space-between",
   borderRadius: "8px",
   transition: "all 0.2s ease-in-out", // Плавная анимация при наведении
   opacity: isDone ? 0.5 : 1,
   mb: "2px",
+  width: "100%" ,
+  minWidth: 0,
 
   "&:hover": {
     backgroundColor: "rgba(0, 0, 0, 0.03)", // Легкий фон при наведении (подсветка строки)

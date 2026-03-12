@@ -7,9 +7,9 @@ import {
   useUpdateTodolistTitleMutation,
 } from "@/features/todolists/api/todolistsApi"
 import type { DomainTodolist } from "@/features/todolists/lib/types"
-import DeleteIcon from "@mui/icons-material/Delete"
 import IconButton from "@mui/material/IconButton"
 import styles from "./TodolistTitle.module.css"
+import CloseIcon from '@mui/icons-material/Close';
 
 type Props = {
   todolist: DomainTodolist
@@ -53,7 +53,8 @@ export const TodolistTitle = ({ todolist }: Props) => {
         <EditableSpan value={title} onChange={changeTodolistTitle} />
       </h3>
       <IconButton onClick={deleteTodolist} disabled={entityStatus === "loading"}>
-        <DeleteIcon />
+        {/*<DeleteIcon />*/}
+        <CloseIcon fontSize="small" />
       </IconButton>
     </div>
   )
