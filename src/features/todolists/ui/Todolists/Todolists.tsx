@@ -1,13 +1,21 @@
-import { containerSx } from "@/common/styles"
-import { useGetTodolistsQuery } from "@/features/todolists/api/todolistsApi"
-import Box from "@mui/material/Box"
-import { TodolistSkeleton } from "./TodolistSkeleton/TodolistSkeleton"
-import Grid from "@mui/material/Grid"
-import Paper from "@mui/material/Paper"
-import { TodolistItem } from "./TodolistItem/TodolistItem"
+import { DndContext, closestCenter, DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { SortableContext, rectSortingStrategy, arrayMove } from '@dnd-kit/sortable';
+import { Grid } from "@mui/material";
+import { useGetTodolistsQuery, useReorderTodolistMutation } from "../../api/todolistsApi";
 
-export const Todolists = () => {
-  const { data: todolists, isLoading } = useGetTodolistsQuery()
+import Box from "@mui/material/Box"
+import { containerSx } from "@/common/styles/container.styles.ts"
+import { TodolistSkeleton } from "@/features/todolists/ui/Todolists/TodolistSkeleton/TodolistSkeleton.tsx"
+import { SortableTodolist } from "@/features/todolists/ui/Todolists/SortableTodolist/SortableTodolist.tsx"
+
+const Todolists = () => {
+  const { data: todolists, isLoading } = useGetTodolistsQuery();
+  const [reorderTodolist] = useReorderTodolistMutation(); // Твой мутейшн для API
+
+  // Настройка сенсоров (чтобы клики по кнопкам внутри карточки не считались началом драга)
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
+  );
 
   if (isLoading) {
     return (
@@ -21,27 +29,36 @@ export const Todolists = () => {
     )
   }
 
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id && todolists) {
+      const oldIndex = todolists.findIndex(t => t.id === active.id);
+      const newIndex = todolists.findIndex(t => t.id === over.id);
+
+      // Вычисляем соседа для API согласно твоей документации
+      // Если ставим на 0 место — null, иначе — id того, кто ТЕПЕРЬ стоит перед нами
+      const newOrder = arrayMove(todolists, oldIndex, newIndex);
+      const putAfterItemId = newIndex === 0 ? null : newOrder[newIndex - 1].id;
+
+      reorderTodolist({
+        todolistId: active.id as string,
+        putAfterItemId
+      });
+    }
+  };
+
   return (
-    <>
-      {todolists?.map((todolist) => (
-        <Grid key={todolist.id}>
-          <Paper  elevation={3}
-                  sx={{
-                    p: 3,
-                    borderRadius: '16px',
-                    transition: 'transform 0.2s',
-                    width: '320px',           // Фиксированная ширина
-                        // Фиксированная высота (подберите под себя)
-                    display: 'flex',          // Включаем flexbox
-                    flexDirection: 'column',
-
-
-                    '&:hover': { transform: 'translateY(-4px)' }
-                  }}>
-            <TodolistItem todolist={todolist} />
-          </Paper>
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+      <SortableContext items={todolists || []} strategy={rectSortingStrategy}>
+        <Grid container spacing={4} justifyContent="flex-start">
+          {todolists?.map((todolist) => (
+            <SortableTodolist key={todolist.id} todolist={todolist} />
+          ))}
         </Grid>
-      ))}
-    </>
-  )
-}
+      </SortableContext>
+    </DndContext>
+  );
+};
+export default Todolists
+

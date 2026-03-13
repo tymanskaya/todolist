@@ -22,6 +22,15 @@ export const tasksApi = baseApi.injectEndpoints({
       },
 
     }),
+    reorderTask: build.mutation<void, { todolistId: string; taskId: string; putAfterItemId: string | null }>({
+      query: ({ todolistId, taskId, putAfterItemId }) => ({
+        url: `/todo-lists/${todolistId}/tasks/${taskId}/reorder`,
+        method: 'PUT',
+        body: { putAfterItemId },
+      }),
+      // Оптимистичное обновление или инвалидация тегов
+      invalidatesTags: ['Task'],
+    }),
     addTask: build.mutation<BaseResponse<{ item: DomainTask }>, { todolistId: string; title: string }>({
       query: ({ todolistId, title }) => ({
         url: `todo-lists/${todolistId}/tasks`,
@@ -79,6 +88,6 @@ export const tasksApi = baseApi.injectEndpoints({
   }),
 })
 
-export const { useGetTasksQuery, useAddTaskMutation, useRemoveTaskMutation, useUpdateTaskMutation } = tasksApi
+export const { useGetTasksQuery, useAddTaskMutation, useRemoveTaskMutation, useUpdateTaskMutation, useReorderTaskMutation } = tasksApi
 
 
