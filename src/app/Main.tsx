@@ -1,6 +1,7 @@
 import { CreateItemForm } from "@/common/components/CreateItemForm/CreateItemForm"
 import { useAddTodolistMutation } from "@/features/todolists/api/todolistsApi"
-import Todolists from "@/features/todolists/ui/Todolists/Todolists"
+import { Todolists } from "@/features/todolists/ui/Todolists/Todolists"
+
 import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
 import Grid from "@mui/material/Grid"

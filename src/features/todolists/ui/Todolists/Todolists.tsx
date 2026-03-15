@@ -8,7 +8,7 @@ import { containerSx } from "@/common/styles/container.styles.ts"
 import { TodolistSkeleton } from "@/features/todolists/ui/Todolists/TodolistSkeleton/TodolistSkeleton.tsx"
 import { SortableTodolist } from "@/features/todolists/ui/Todolists/SortableTodolist/SortableTodolist.tsx"
 
-const Todolists = () => {
+export const Todolists = () => {
   const { data: todolists, isLoading } = useGetTodolistsQuery();
   const [reorderTodolist] = useReorderTodolistMutation(); // Твой мутейшн для API
 
@@ -60,5 +60,5 @@ const Todolists = () => {
     </DndContext>
   );
 };
-export default Todolists
+
 
